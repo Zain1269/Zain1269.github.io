@@ -34,6 +34,8 @@
   --block-ink: #EEF2F5;
   --block-ink-2: #AAB7C3;
   --header-h: 64px;
+  /* One column rail shared by every section, so the right-hand content always starts on the same line */
+  --cols: minmax(0, 5fr) minmax(0, 7fr);
   color-scheme: light;
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
@@ -234,10 +236,10 @@ a:hover { text-decoration-color: currentColor; }
 /* Hero */
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: clamp(36px, 5vw, 72px);
-  align-items: center;
-  padding-block: clamp(48px, 8vw, 104px) clamp(64px, 9vw, 120px);
+  grid-template-columns: var(--cols);
+  gap: 36px 48px;
+  align-items: start;
+  padding-block: clamp(48px, 7vw, 88px) clamp(56px, 7vw, 88px);
 }
 @media (max-width: 960px) {
   .hero { grid-template-columns: minmax(0, 1fr); }
@@ -246,7 +248,7 @@ a:hover { text-decoration-color: currentColor; }
   margin: 0;
   font-weight: 800;
   font-stretch: 125%;
-  font-size: clamp(2.9rem, 1.2rem + 5.6vw, 5.25rem);
+  font-size: clamp(2.9rem, 1.4rem + 3.9vw, 4.5rem);
   line-height: 0.92;
   letter-spacing: -0.02em;
 }
@@ -316,12 +318,12 @@ a:hover { text-decoration-color: currentColor; }
 .answers a:hover .src { text-decoration-color: currentColor; }
 
 /* Sections */
-.section { padding-block: clamp(64px, 9vw, 120px); }
+.section { padding-block: clamp(56px, 7vw, 88px); }
 .section-head {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  grid-template-columns: var(--cols);
   gap: 12px 48px;
-  align-items: end;
+  align-items: baseline;
   margin-bottom: clamp(28px, 4vw, 48px);
 }
 @media (max-width: 860px) {
@@ -331,7 +333,7 @@ h2 {
   margin: 0;
   font-weight: 700;
   font-stretch: 112%;
-  font-size: clamp(1.75rem, 1.3rem + 1.5vw, 2.25rem);
+  font-size: clamp(1.75rem, 1.2rem + 1.9vw, 2.5rem);
   line-height: 1.05;
   letter-spacing: -0.012em;
 }
@@ -350,11 +352,11 @@ h2 {
 
 /* Projects */
 .case { padding-block: clamp(36px, 5vw, 64px); }
-.case:first-of-type { padding-top: 0; }
+.case:first-of-type { border-top: 1.5px solid var(--ink); }
 .case + .case { border-top: 1px solid var(--rule); }
 .case-head {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  grid-template-columns: var(--cols);
   gap: 10px 48px;
   align-items: baseline;
   margin-bottom: clamp(20px, 3vw, 28px);
@@ -366,7 +368,7 @@ h2 {
   margin: 0;
   font-weight: 750;
   font-stretch: 112%;
-  font-size: clamp(1.6rem, 1.25rem + 1.2vw, 2.1rem);
+  font-size: clamp(1.5rem, 1.3rem + 0.6vw, 1.75rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
 }
@@ -422,7 +424,7 @@ h2 {
 
 .case-body {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  grid-template-columns: var(--cols);
   gap: 28px 48px;
   margin-top: clamp(26px, 3.5vw, 38px);
 }
@@ -431,6 +433,32 @@ h2 {
 }
 .case-how p + p { margin-top: 12px; }
 .case-how .tools { margin-top: 14px; }
+
+/* Laptop and wider: the project's story sits in the left column, its screenshots in the right */
+@media (min-width: 961px) {
+  .case {
+    display: grid;
+    grid-template-columns: var(--cols);
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas:
+      "title gallery"
+      "question gallery"
+      "how gallery"
+      "found gallery";
+    column-gap: 48px;
+  }
+  .case-head, .case-body { display: contents; }
+  .case h3 { grid-area: title; }
+  .case .question { grid-area: question; margin-top: 12px; }
+  .case-how { grid-area: how; margin-top: 22px; }
+  .case-found { grid-area: found; margin-top: 26px; }
+  .case .gallery {
+    grid-area: gallery;
+    align-self: start;
+    position: sticky;
+    top: calc(env(safe-area-inset-top, 0px) + var(--header-h) + 24px);
+  }
+}
 
 .tools { margin-top: 12px; font-size: 0.9375rem; color: var(--ink-3); }
 .links {
@@ -482,8 +510,8 @@ h2 {
 }
 .index > li {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: 18px clamp(24px, 4vw, 48px);
+  grid-template-columns: var(--cols);
+  gap: 18px 48px;
   align-items: start;
   padding-block: clamp(24px, 3.5vw, 36px);
   border-bottom: 1px solid var(--rule);
@@ -515,7 +543,7 @@ h2 {
 /* Experience */
 .split {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  grid-template-columns: var(--cols);
   gap: 28px 48px;
 }
 @media (max-width: 860px) {
@@ -565,13 +593,19 @@ h2 {
 /* Skills and background */
 .two-up {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(48px, 6vw, 88px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(48px, 6vw, 72px);
+}
+.two-up > div {
+  display: grid;
+  grid-template-columns: var(--cols);
+  gap: 20px 48px;
+  align-items: start;
 }
 @media (max-width: 860px) {
-  .two-up { grid-template-columns: minmax(0, 1fr); }
+  .two-up > div { grid-template-columns: minmax(0, 1fr); }
 }
-.spec { margin: 24px 0 0; border-top: 1.5px solid var(--ink); }
+.spec { margin: 0; border-top: 1.5px solid var(--ink); }
 .spec > div {
   display: grid;
   grid-template-columns: minmax(8.5rem, 0.8fr) minmax(0, 1.4fr);
@@ -594,7 +628,7 @@ h2 {
 .contact { background: var(--block); color: var(--block-ink); }
 .contact-inner {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  grid-template-columns: var(--cols);
   gap: 20px 48px;
   align-items: start;
   padding-block: clamp(64px, 9vw, 112px);
